@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/WebApi/WebApi.csproj" />
+  </Folder>
+  <Folder Name="/src/BloodTestContext/">
+    <Project Path="src/BloodTestContext/BloodTestContext.Domain/BloodTestContext.Domain.csproj" />
+    <Project Path="src/BloodTestContext/BloodTestContext.Infrastructure/BloodTestContext.Infrastructure.csproj" />
+    <Project Path="src/BloodTestContext/BloodTestContext.Domain.Tests/BloodTestContext.Domain.Tests.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/WebApi.Tests/WebApi.Tests.csproj" />
+  </Folder>
+</Solution>
