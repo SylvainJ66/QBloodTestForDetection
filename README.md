@@ -1,6 +1,6 @@
 # QBloodTestForDetection
 
-Lung cancer detection from blood tests using quantum machine learning classification.
+Lung cancer detection from blood tests using quantum circuit classification.
 
 ## The Problem
 
@@ -40,14 +40,14 @@ The quantum advantage becomes significant as biomarker count grows: 50 biomarker
 
 ### Why Quantum is a Game Changer — The Cleveland Clinic Scale
 
-This project uses 2 biomarkers (SHOX2 + PTGER4) — a scale where classical machine learning works perfectly fine. The quantum circuit here is pedagogical: it demonstrates the encoding and classification pattern without requiring quantum hardware to outperform a logistic regression.
+This project uses 2 biomarkers (SHOX2 + PTGER4) — a scale where classical computation handles classification without difficulty. The quantum circuit here is pedagogical: it demonstrates the encoding and classification pattern that becomes essential at larger biomarker scales.
 
 The Cleveland Clinic & IBM Quantum collaboration operates at an entirely different scale. Their liquid biopsy research analyzes:
 
 - **Fragmentomics** — over **40 million DNA fragments** across the genome, measuring cfDNA fragmentation patterns caused by dying cells. Detected 8 out of 10 lung cancers while cutting the number of CT scans needed by more than 50%.
 - **Methylomics** — methylation levels at **~6 million genomic loci**, looking for cancer-specific epigenetic signatures. Detected 9 out of 10 lung cancers with the same 50%+ scan reduction.
 
-At this scale, the combinatorial explosion makes quantum computing genuinely transformative. Classical ML must learn decision boundaries in a 6-million-dimensional feature space — the interactions between loci grow combinatorially, and traditional kernel methods or deep networks struggle with both compute cost and generalization. Quantum variational classifiers encode these millions of features into qubit rotations, and superposition lets the circuit explore an exponentially large state space (2^N for N qubits) in a single forward pass. Entanglement captures correlations between distant genomic loci that classical models would need explicit feature engineering to represent.
+At this scale, the combinatorial explosion makes quantum computing genuinely transformative. Classifying across a 6-million-dimensional feature space means the interactions between loci grow combinatorially — classical approaches struggle with both compute cost and generalization. Quantum variational classifiers encode these millions of features into qubit rotations, and superposition lets the circuit explore an exponentially large state space (2^N for N qubits) in a single forward pass. Entanglement captures correlations between distant genomic loci that classical approaches would need explicit feature engineering to represent.
 
 This is why Cleveland Clinic deployed the IBM Quantum System One — the first quantum computer dedicated to healthcare research — on their campus: not as a proof of concept, but because the dimensionality of real liquid biopsy data is where quantum algorithms start to deliver advantages that classical hardware cannot match.
 
