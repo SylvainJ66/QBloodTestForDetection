@@ -31,6 +31,16 @@ Blood sample → cfDNA extraction → SHOX2/PTGER4 methylation measurement → n
 
 The quantum classification circuit is implemented in **Python** using **Qiskit** with the **Aer simulator** backend, following the same approach as the original research:
 
+```
+        ┌─────────────┐      ┌───┐
+q₀ |0⟩ ─┤ RY(π·shox2) ├───●──┤ M ├─→ c₀
+        └─────────────┘   │  └───┘
+        ┌─────────────┐ ┌─┴─┐┌───┐
+q₁ |0⟩ ─┤ RY(π·ptger4)├─┤ X ├┤ M ├─→ c₁
+        └─────────────┘ └───┘└───┘
+         ── Encoding ──  Ent.  Meas.
+```
+
 1. **Encoding (RY gates)** — biomarker values are converted to rotation angles (`angle = value * pi`) and applied as RY rotations on qubits, mapping each biomarker onto the Bloch sphere
 2. **Correlation (CNOT entanglement)** — a CNOT gate captures the interdependency between SHOX2 and PTGER4, leveraging quantum entanglement instead of classical matrix multiplication
 3. **Classification (parameterized rotation)** — a trained RY rotation on the control qubit acts as the decision boundary, optimized on labeled data
@@ -47,7 +57,28 @@ The Cleveland Clinic & IBM Quantum collaboration operates at an entirely differe
 - **Fragmentomics** — over **40 million DNA fragments** across the genome, measuring cfDNA fragmentation patterns caused by dying cells. Detected 8 out of 10 lung cancers while cutting the number of CT scans needed by more than 50%.
 - **Methylomics** — methylation levels at **~6 million genomic loci**, looking for cancer-specific epigenetic signatures. Detected 9 out of 10 lung cancers with the same 50%+ scan reduction.
 
-At this scale, the combinatorial explosion makes quantum computing genuinely transformative. Classifying across a 6-million-dimensional feature space means the interactions between loci grow combinatorially — classical approaches struggle with both compute cost and generalization. Quantum variational classifiers encode these millions of features into qubit rotations, and superposition lets the circuit explore an exponentially large state space (2^N for N qubits) in a single forward pass. Entanglement captures correlations between distant genomic loci that classical approaches would need explicit feature engineering to represent.
+At this scale, a **variational quantum classifier (VQC)** replaces our simple 2-qubit circuit with a deep, layered architecture — here illustrated with N biomarkers:
+
+```
+              ┌──────────┐┌───┐┌──────────┐       ┌───┐
+q₀ (marker₁) ┤ RY(π·m₁) ├┤ ● ├┤ RY(θ₁)  ├─ ··· ─┤ M ├
+              └──────────┘└─┬─┘└──────────┘       └───┘
+              ┌──────────┐┌─┴─┐┌──────────┐       ┌───┐
+q₁ (marker₂) ┤ RY(π·m₂) ├┤ X ├┤ RY(θ₂)  ├─ ··· ─┤ M ├
+              └──────────┘└───┘└──────────┘       └───┘
+              ┌──────────┐┌───┐┌──────────┐       ┌───┐
+q₂ (marker₃) ┤ RY(π·m₃) ├┤ ● ├┤ RY(θ₃)  ├─ ··· ─┤ M ├
+              └──────────┘└─┬─┘└──────────┘       └───┘
+    ⋮              ⋮         ⋮        ⋮              ⋮
+              ┌──────────┐┌─┴─┐┌──────────┐       ┌───┐
+qₙ (markerₙ) ┤ RY(π·mₙ) ├┤ X ├┤ RY(θₙ)  ├─ ··· ─┤ M ├
+              └──────────┘└───┘└──────────┘       └───┘
+               ─ Encoding ─ Entanglement ─ × L ─  Meas.
+```
+
+Each biomarker gets its own qubit and RY encoding gate. CNOT chains entangle neighboring qubits, then parameterized RY(θ) rotations form trainable weights — this entanglement + rotation block repeats L times, building a deep classifier. With N qubits in superposition, the circuit explores 2^N states simultaneously: 50 biomarkers → ~10^15 combinations in a single pass; 6 million methylation loci → a state space no classical machine can enumerate.
+
+The combinatorial explosion makes quantum computing genuinely transformative. Classifying across a 6-million-dimensional feature space means the interactions between loci grow combinatorially — classical approaches struggle with both compute cost and generalization. Quantum variational classifiers encode these millions of features into qubit rotations, and superposition lets the circuit explore an exponentially large state space (2^N for N qubits) in a single forward pass. Entanglement captures correlations between distant genomic loci that classical approaches would need explicit feature engineering to represent.
 
 This is why Cleveland Clinic deployed the IBM Quantum System One — the first quantum computer dedicated to healthcare research — on their campus: not as a proof of concept, but because the dimensionality of real liquid biopsy data is where quantum algorithms start to deliver advantages that classical hardware cannot match.
 
