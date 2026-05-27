@@ -9,12 +9,14 @@ public class QuantumRiskClassifier(string pythonPath, string scriptPath) : IRisk
 {
     public CalibrationStatus CalibrationStatus => CalibrationStatus.Experimental;
 
-    public async Task<double> ClassifyAsync(MethylationValue shox2, MethylationValue ptger4)
+    public async Task<double> ClassifyAsync(
+        MethylationValue shox2, MethylationValue ptger4,
+        MethylationValue rassf1a, MethylationValue apc, MethylationValue cdh13)
     {
         var startInfo = new ProcessStartInfo
         {
             FileName = pythonPath,
-            Arguments = $"\"{scriptPath}\" {shox2.Value.ToString(CultureInfo.InvariantCulture)} {ptger4.Value.ToString(CultureInfo.InvariantCulture)}",
+            Arguments = $"\"{scriptPath}\" {shox2.Value.ToString(CultureInfo.InvariantCulture)} {ptger4.Value.ToString(CultureInfo.InvariantCulture)} {rassf1a.Value.ToString(CultureInfo.InvariantCulture)} {apc.Value.ToString(CultureInfo.InvariantCulture)} {cdh13.Value.ToString(CultureInfo.InvariantCulture)}",
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             UseShellExecute = false,

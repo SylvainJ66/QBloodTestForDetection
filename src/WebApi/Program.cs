@@ -20,13 +20,20 @@ app.MapPost("/api/blood-samples/evaluate", async (
     IRiskClassifier classifier,
     IBloodSampleEvaluationRepository repository) =>
 {
-    var command = new SubmitBloodSampleCommand(request.Shox2MethylationValue, request.Ptger4MethylationValue);
-    var result = await SubmitBloodSampleHandler.Handle(command, classifier, repository);
+    var command = new SubmitBloodSampleCommand(
+        request.Shox2MethylationValue, request.Ptger4MethylationValue,
+        request.Rassf1aMethylationValue, request.ApcMethylationValue, request.Cdh13MethylationValue);
+    
+    var result = await SubmitBloodSampleHandler.Handle(
+        command,
+        classifier,
+        repository);
 
     if (result.IsFailure)
         return Results.BadRequest(new { Error = result.Error });
 
     var evaluation = result.Value;
+    
     return Results.Ok(new
     {
         evaluation.Id,
@@ -37,4 +44,9 @@ app.MapPost("/api/blood-samples/evaluate", async (
 
 app.Run();
 
-public record SubmitBloodSampleRequest(double? Shox2MethylationValue, double? Ptger4MethylationValue);
+public record SubmitBloodSampleRequest(
+    double? Shox2MethylationValue,
+    double? Ptger4MethylationValue,
+    double? Rassf1aMethylationValue,
+    double? ApcMethylationValue,
+    double? Cdh13MethylationValue);

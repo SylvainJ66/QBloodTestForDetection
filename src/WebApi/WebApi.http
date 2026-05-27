@@ -1,12 +1,15 @@
 @host = http://localhost:5181
 
-### High risk — both markers strongly hypermethylated
+### High risk — all five markers strongly hypermethylated
 POST {{host}}/api/blood-samples/evaluate
 Content-Type: application/json
 
 {
   "Shox2MethylationValue": 0.78,
-  "Ptger4MethylationValue": 0.85
+  "Ptger4MethylationValue": 0.85,
+  "Rassf1aMethylationValue": 0.72,
+  "ApcMethylationValue": 0.80,
+  "Cdh13MethylationValue": 0.68
 }
 
 ### Moderate risk — moderate hypermethylation
@@ -15,7 +18,10 @@ Content-Type: application/json
 
 {
   "Shox2MethylationValue": 0.45,
-  "Ptger4MethylationValue": 0.50
+  "Ptger4MethylationValue": 0.50,
+  "Rassf1aMethylationValue": 0.42,
+  "ApcMethylationValue": 0.48,
+  "Cdh13MethylationValue": 0.40
 }
 
 ### Low risk — mild hypermethylation
@@ -24,7 +30,10 @@ Content-Type: application/json
 
 {
   "Shox2MethylationValue": 0.35,
-  "Ptger4MethylationValue": 0.30
+  "Ptger4MethylationValue": 0.30,
+  "Rassf1aMethylationValue": 0.32,
+  "ApcMethylationValue": 0.28,
+  "Cdh13MethylationValue": 0.25
 }
 
 ### Normal — values below threshold
@@ -33,7 +42,10 @@ Content-Type: application/json
 
 {
   "Shox2MethylationValue": 0.10,
-  "Ptger4MethylationValue": 0.12
+  "Ptger4MethylationValue": 0.12,
+  "Rassf1aMethylationValue": 0.08,
+  "ApcMethylationValue": 0.11,
+  "Cdh13MethylationValue": 0.09
 }
 
 ### Error — missing SHOX2 value
@@ -41,7 +53,10 @@ POST {{host}}/api/blood-samples/evaluate
 Content-Type: application/json
 
 {
-  "Ptger4MethylationValue": 0.50
+  "Ptger4MethylationValue": 0.50,
+  "Rassf1aMethylationValue": 0.50,
+  "ApcMethylationValue": 0.50,
+  "Cdh13MethylationValue": 0.50
 }
 
 ### Error — value out of range
@@ -50,5 +65,8 @@ Content-Type: application/json
 
 {
   "Shox2MethylationValue": 1.5,
-  "Ptger4MethylationValue": 0.50
+  "Ptger4MethylationValue": 0.50,
+  "Rassf1aMethylationValue": 0.50,
+  "ApcMethylationValue": 0.50,
+  "Cdh13MethylationValue": 0.50
 }

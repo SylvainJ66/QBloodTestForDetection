@@ -34,7 +34,10 @@ public class SubmitBloodSampleApiTest
         var response = await client.PostAsJsonAsync("/api/blood-samples/evaluate", new
         {
             Shox2MethylationValue = 0.78,
-            Ptger4MethylationValue = 0.85
+            Ptger4MethylationValue = 0.85,
+            Rassf1aMethylationValue = 0.72,
+            ApcMethylationValue = 0.80,
+            Cdh13MethylationValue = 0.68
         });
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -56,7 +59,10 @@ public class SubmitBloodSampleApiTest
         var response = await client.PostAsJsonAsync("/api/blood-samples/evaluate", new
         {
             Shox2MethylationValue = 1.5,
-            Ptger4MethylationValue = 0.5
+            Ptger4MethylationValue = 0.5,
+            Rassf1aMethylationValue = 0.5,
+            ApcMethylationValue = 0.5,
+            Cdh13MethylationValue = 0.5
         });
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);

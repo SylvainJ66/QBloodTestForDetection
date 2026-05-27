@@ -20,13 +20,33 @@ public static class SubmitBloodSampleHandler
         if (ptger4Result.IsFailure)
             return Result.Failure<BloodSampleEvaluation>(ptger4Result.Error);
 
-        var probability = await classifier.ClassifyAsync(shox2Result.Value, ptger4Result.Value);
+        var rassf1aResult = MethylationValue.Create(command.Rassf1aMethylationValue, "RASSF1A");
+
+        if (rassf1aResult.IsFailure)
+            return Result.Failure<BloodSampleEvaluation>(rassf1aResult.Error);
+
+        var apcResult = MethylationValue.Create(command.ApcMethylationValue, "APC");
+
+        if (apcResult.IsFailure)
+            return Result.Failure<BloodSampleEvaluation>(apcResult.Error);
+
+        var cdh13Result = MethylationValue.Create(command.Cdh13MethylationValue, "CDH13");
+
+        if (cdh13Result.IsFailure)
+            return Result.Failure<BloodSampleEvaluation>(cdh13Result.Error);
+
+        var probability = await classifier.ClassifyAsync(
+            shox2Result.Value, ptger4Result.Value,
+            rassf1aResult.Value, apcResult.Value, cdh13Result.Value);
         var assessment = RiskAssessment.FromProbability(probability);
 
         var evaluation = new BloodSampleEvaluation(
             Guid.NewGuid(),
             shox2Result.Value,
             ptger4Result.Value,
+            rassf1aResult.Value,
+            apcResult.Value,
+            cdh13Result.Value,
             assessment.RiskLevel,
             assessment.Recommendation,
             classifier.CalibrationStatus,
