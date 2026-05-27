@@ -80,6 +80,10 @@ dotnet test
 dotnet stryker -f src/BloodTestContext/BloodTestContext.Domain.Tests/stryker-config.json
 ```
 
+## Architecture Decision Records
+
+- [ADR-0001: Use Python Qiskit Aer instead of Q#](docs/adr/0001-use-python-qiskit-aer-instead-of-qsharp.md)
+
 ## References
 
 - [Quantum-Enhanced Lung Cancer Detection (mugiwarai.org)](https://mugiwarai.org/blog/quantum-cancer-poumon/)
