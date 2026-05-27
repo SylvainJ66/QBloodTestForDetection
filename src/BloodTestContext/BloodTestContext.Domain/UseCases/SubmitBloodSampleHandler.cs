@@ -29,6 +29,7 @@ public static class SubmitBloodSampleHandler
             ptger4Result.Value,
             assessment.RiskLevel,
             assessment.Recommendation,
+            classifier.CalibrationStatus,
             DateTimeOffset.UtcNow);
 
         await repository.SaveAsync(evaluation);

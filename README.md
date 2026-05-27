@@ -27,9 +27,9 @@ Methylation values are normalized to [0, 1]. Normal levels sit below 0.3 (30%); 
 Blood sample → cfDNA extraction → SHOX2/PTGER4 methylation measurement → normalization [0,1] → quantum circuit classification → risk stratification → clinical recommendation
 ```
 
-### Quantum Circuit (Q#)
+### Quantum Circuit (Qiskit Aer)
 
-The original research uses Qiskit (Python). This project reimplements the quantum classification circuit in **Q#** with the following phases:
+The quantum classification circuit is implemented in **Python** using **Qiskit** with the **Aer simulator** backend, following the same approach as the original research:
 
 1. **Encoding (RY gates)** — biomarker values are converted to rotation angles (`angle = value * pi`) and applied as RY rotations on qubits, mapping each biomarker onto the Bloch sphere
 2. **Correlation (CNOT entanglement)** — a CNOT gate captures the interdependency between SHOX2 and PTGER4, leveraging quantum entanglement instead of classical matrix multiplication
@@ -63,7 +63,7 @@ This is why Cleveland Clinic deployed the IBM Quantum System One — the first q
 ## Tech Stack
 
 - **.NET 10** — domain logic, API, hexagonal architecture
-- **Q#** — quantum circuit operations (encoding, entanglement, classification)
+- **Python / Qiskit Aer** — quantum circuit simulation (encoding, entanglement, classification)
 - **xUnit + FluentAssertions** — BDD-style testing
 - **Stryker** — mutation testing with 100% kill threshold
 

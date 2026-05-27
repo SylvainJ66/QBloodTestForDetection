@@ -6,4 +6,5 @@ public record BloodSampleEvaluation(
     MethylationValue Ptger4Methylation,
     RiskLevel RiskLevel,
     string Recommendation,
+    CalibrationStatus CalibrationStatus,
     DateTimeOffset EvaluatedAt);
