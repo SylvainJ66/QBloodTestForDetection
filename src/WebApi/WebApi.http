@@ -1,0 +1,54 @@
+@host = http://localhost:5181
+
+### High risk — both markers strongly hypermethylated
+POST {{host}}/api/blood-samples/evaluate
+Content-Type: application/json
+
+{
+  "Shox2MethylationValue": 0.78,
+  "Ptger4MethylationValue": 0.85
+}
+
+### Moderate risk — moderate hypermethylation
+POST {{host}}/api/blood-samples/evaluate
+Content-Type: application/json
+
+{
+  "Shox2MethylationValue": 0.45,
+  "Ptger4MethylationValue": 0.50
+}
+
+### Low risk — mild hypermethylation
+POST {{host}}/api/blood-samples/evaluate
+Content-Type: application/json
+
+{
+  "Shox2MethylationValue": 0.35,
+  "Ptger4MethylationValue": 0.30
+}
+
+### Normal — values below threshold
+POST {{host}}/api/blood-samples/evaluate
+Content-Type: application/json
+
+{
+  "Shox2MethylationValue": 0.10,
+  "Ptger4MethylationValue": 0.12
+}
+
+### Error — missing SHOX2 value
+POST {{host}}/api/blood-samples/evaluate
+Content-Type: application/json
+
+{
+  "Ptger4MethylationValue": 0.50
+}
+
+### Error — value out of range
+POST {{host}}/api/blood-samples/evaluate
+Content-Type: application/json
+
+{
+  "Shox2MethylationValue": 1.5,
+  "Ptger4MethylationValue": 0.50
+}

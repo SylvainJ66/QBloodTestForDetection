@@ -111,6 +111,93 @@ dotnet test
 dotnet stryker -f src/BloodTestContext/BloodTestContext.Domain.Tests/stryker-config.json
 ```
 
+## API Examples
+
+The API exposes a single endpoint: `POST /api/blood-samples/evaluate`. It accepts two methylation values (normalized to [0, 1]), runs them through the quantum circuit, and returns a risk assessment.
+
+### High risk — both markers strongly hypermethylated
+
+```http
+POST /api/blood-samples/evaluate
+Content-Type: application/json
+
+{
+  "Shox2MethylationValue": 0.78,
+  "Ptger4MethylationValue": 0.85
+}
+```
+
+Both markers are far above the 0.30 normal threshold. SHOX2 at 78% and PTGER4 at 85% indicate strong hypermethylation — a pattern frequently observed in active lung tumors. The quantum circuit produces a high probability (typically >70%), triggering an **urgent CT scan recommendation**.
+
+### Moderate risk — moderate hypermethylation
+
+```http
+POST /api/blood-samples/evaluate
+Content-Type: application/json
+
+{
+  "Shox2MethylationValue": 0.45,
+  "Ptger4MethylationValue": 0.50
+}
+```
+
+Both markers are above normal but not dramatically elevated. This could indicate an early-stage cancer or a benign condition causing methylation changes. The quantum circuit returns a probability in the 50-70% range, recommending a **CT scan within 30 days** for further investigation.
+
+### Low risk — mild hypermethylation
+
+```http
+POST /api/blood-samples/evaluate
+Content-Type: application/json
+
+{
+  "Shox2MethylationValue": 0.35,
+  "Ptger4MethylationValue": 0.30
+}
+```
+
+Values sit right at the edge of the normal threshold. The slight elevation could be noise, inflammation, or very early changes. The circuit returns a probability in the 30-50% range, recommending **surveillance with a retest in 6 months** rather than immediate imaging.
+
+### Normal — values below threshold
+
+```http
+POST /api/blood-samples/evaluate
+Content-Type: application/json
+
+{
+  "Shox2MethylationValue": 0.10,
+  "Ptger4MethylationValue": 0.12
+}
+```
+
+Both markers are well within the normal range (<30%). The cfDNA methylation pattern shows no sign of tumor activity. The circuit returns a low probability (<30%), and the patient continues with **standard annual screening**.
+
+### Error — missing marker value
+
+```http
+POST /api/blood-samples/evaluate
+Content-Type: application/json
+
+{
+  "Ptger4MethylationValue": 0.50
+}
+```
+
+Both SHOX2 and PTGER4 are required. The domain rejects incomplete submissions because the quantum circuit needs both qubit inputs to produce a meaningful classification. Returns a `400 Bad Request` with an error message.
+
+### Error — value out of biological range
+
+```http
+POST /api/blood-samples/evaluate
+Content-Type: application/json
+
+{
+  "Shox2MethylationValue": 1.5,
+  "Ptger4MethylationValue": 0.50
+}
+```
+
+Methylation values must be between 0 and 1 (0% to 100%). A value of 1.5 is biologically impossible — it would mean 150% methylation. The domain validates this invariant and returns a `400 Bad Request` before reaching the quantum circuit.
+
 ## Architecture Decision Records
 
 - [ADR-0001: Use Python Qiskit Aer instead of Q#](docs/adr/0001-use-python-qiskit-aer-instead-of-qsharp.md)
