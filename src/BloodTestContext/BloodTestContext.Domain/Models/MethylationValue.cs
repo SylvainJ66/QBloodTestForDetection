@@ -9,12 +9,12 @@ public record MethylationValue
         Value = value;
     }
 
-    public static Result<MethylationValue> Create(double? value)
+    public static Result<MethylationValue> Create(double? value, string biomarkerName)
     {
         return value switch
         {
-            null => Result.Failure<MethylationValue>("Both biomarkers are required"),
-            < 0 or > 1 => Result.Failure<MethylationValue>("Methylation values must be between 0 and 1"),
+            null => Result.Failure<MethylationValue>($"{biomarkerName} methylation value is required"),
+            < 0 or > 1 => Result.Failure<MethylationValue>($"{biomarkerName} methylation value must be between 0 and 1"),
             _ => Result.Success(new MethylationValue(value.Value))
         };
     }

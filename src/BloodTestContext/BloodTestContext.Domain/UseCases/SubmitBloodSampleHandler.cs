@@ -5,20 +5,34 @@ namespace BloodTestContext.Domain.UseCases;
 
 public static class SubmitBloodSampleHandler
 {
-    public static Task<Result> Handle(
+    public static async Task<Result<BloodSampleEvaluation>> Handle(
         SubmitBloodSampleCommand command,
+        IRiskClassifier classifier,
         IBloodSampleEvaluationRepository repository)
     {
-        var shox2Result = MethylationValue.Create(command.Shox2MethylationValue);
-        
+        var shox2Result = MethylationValue.Create(command.Shox2MethylationValue, "SHOX2");
+
         if (shox2Result.IsFailure)
-            return Task.FromResult(Result.Failure(shox2Result.Error));
+            return Result.Failure<BloodSampleEvaluation>(shox2Result.Error);
 
-        var ptger4Result = MethylationValue.Create(command.Ptger4MethylationValue);
-        
+        var ptger4Result = MethylationValue.Create(command.Ptger4MethylationValue, "PTGER4");
+
         if (ptger4Result.IsFailure)
-            return Task.FromResult(Result.Failure(ptger4Result.Error));
+            return Result.Failure<BloodSampleEvaluation>(ptger4Result.Error);
 
-        return Task.FromResult(Result.Success());
+        var probability = await classifier.ClassifyAsync(shox2Result.Value, ptger4Result.Value);
+        var assessment = RiskAssessment.FromProbability(probability);
+
+        var evaluation = new BloodSampleEvaluation(
+            Guid.NewGuid(),
+            shox2Result.Value,
+            ptger4Result.Value,
+            assessment.RiskLevel,
+            assessment.Recommendation,
+            DateTimeOffset.UtcNow);
+
+        await repository.SaveAsync(evaluation);
+
+        return Result.Success(evaluation);
     }
 }

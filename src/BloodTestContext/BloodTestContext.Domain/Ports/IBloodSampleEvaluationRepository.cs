@@ -1,6 +1,8 @@
+using BloodTestContext.Domain.Models;
+
 namespace BloodTestContext.Domain.Ports;
 
 public interface IBloodSampleEvaluationRepository
 {
-    Task SaveAsync(object evaluation);
+    Task SaveAsync(BloodSampleEvaluation evaluation);
 }

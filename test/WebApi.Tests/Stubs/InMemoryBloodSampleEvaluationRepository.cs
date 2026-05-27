@@ -1,7 +1,7 @@
 using BloodTestContext.Domain.Models;
 using BloodTestContext.Domain.Ports;
 
-namespace BloodTestContext.Domain.Tests.Stubs;
+namespace WebApi.Tests.Stubs;
 
 public class InMemoryBloodSampleEvaluationRepository : IBloodSampleEvaluationRepository
 {
